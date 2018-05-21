@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Tagged Literal Example</title>
+	</head>
+	<body>
+	</body>
+	<script>
+		var name = 'vinit';
+		var greetings = greet`Hello ${name} S ${'patil'}.`;
+		console.log(greetings);
+
+		function greet(hardCodedArr,...replacementArr) {
+			return [...hardCodedArr,...replacementArr];
+		}
+	</script>
+</html>

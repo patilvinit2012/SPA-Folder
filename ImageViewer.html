@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Title of the document</title>
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	</head>
+	<style type="text/css" media="screen">
+		/* html {
+		    background: url(file://172.16.202.55/mpl6/day%202/1/100CANON/IMG_9711.JPG);
+		    background-attachment: fixed;
+		    background-position: center;
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+		} */
+	</style>
+	<body >
+		<div class="container">
+  <br>
+  <div id="myCarousel" class="carousel slide">
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox" id="imgList">
+      <div class="item active">
+        <img src="file://172.16.202.55/mpl6/day%202/1/101CANON/IMG_0001.JPG">
+      </div>
+    </div>
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+      <span class="sr-only" style="color:red;">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+</div>
+	</body>
+	<script>
+		$('.right').bind('click',function(){
+			var lastImgName = $('#imgList .item:last img').attr('src');
+			var nextImageName = getNextImgName(lastImgName);
+			var divEle = document.createElement('div');
+			divEle.className = 'item';
+			var imgEle = document.createElement('img');
+			imgEle.src = nextImageName;
+			divEle.append(imgEle);
+			$('#imgList').append(divEle);
+		});
+
+		function getNextImgName(lastImgName){
+			var path = lastImgName.substr(0,lastImgName.lastIndexOf(`/`)+1);
+			var imgName = lastImgName.substr(lastImgName.lastIndexOf(`/`)+1);
+			var fileName =  imgName.split('.')[0];
+			var ext = imgName.split('.')[1];
+			var alphaFn = fileName.replace(/[0-9]/g, '');
+			var numFileName = fileName.replace(/^\D+/g, '');
+			var numLen = numFileName.length;
+			numFileName = parseInt(numFileName);
+			numFileName++;
+			return `${path}${alphaFn}${numFileName.toString().padStart(numLen,'0')}.${ext}`;
+		}
+
+
+
+
+
+
+		/*var url = $('html').css('background');
+		var ogBg = url;
+		var i = url.indexOf(`"`);
+		var url = url.substr(i+1);
+		var i = url.indexOf(`"`);
+		url = url.substr(0,i);*/
+	</script>
+</html>
