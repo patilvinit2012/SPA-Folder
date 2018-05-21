@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>OMDB Materialize</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+		<style type="text/css" media="screen">
+
+		</style>
+	</head>
+	
+	<body>
+	
+	<nav class="navbar navbar-default sticky">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<!-- <img src="https://www.imdb.com/favicon.ico" alt=""> -->
+				<a class="navbar-brand" href="#">OMDB</a>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container">
+		<div class="row">
+			<div style="margin-top: 5px">
+				<a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+			</div>
+			<div class="col s6 input-field">
+				<input type="text" id="q" placeholder="Find Movies, TV shows, Celebrities and more..." autocomplete="off">
+			</div>
+<!-- 		</div>
+
+<div class="row"> -->
+			<div id="movie" style="display: none">
+				<div class="col">
+				<div class="card sticky-action">
+				    <div class="card-image waves-effect waves-block waves-light">
+				      <img class="activator" id="movieImg" src="">
+				    </div>
+				    <div class="card-content">
+				      <span class="card-title activator grey-text text-darken-4" id="movieTitle"><i class="material-icons right">more_vert</i></span>
+				      <p id="genres"></p>
+				    </div>
+				    <div class="card-action">
+				    	<p id="imdbRating"></p>
+				    	<sup id="imdbVotes"></sup>
+				    </div>
+				    <div class="card-reveal">
+				      <span class="card-title grey-text text-darken-4">Cast<i class="material-icons right">close</i></span>
+				      <p id="cast">Here is some more information about this product that is only revealed once clicked on.</p>
+				      <span class="card-title grey-text text-darken-4">Plot</span>
+				      <p id="plot">hello</p>
+				    </div>
+			  	</div>
+			</div>	
+			</div>
+			
+		</div>
+	</div>
+	</body>
+
+	
+	<script>
+
+		$('#q').autocomplete({
+			source: function(req,res){
+				$.ajax({
+					url: `http://www.omdbapi.com/?apikey=3fd68d19&s=${$('#q').val()}`,
+					success: function(data){
+						if((data) && (data.Response != "False")){
+							var arr = data.Search.map(function(obj,i){
+								return {
+									label: `${obj.Title} (${obj.Year})` ,imdbID: obj.imdbID
+								};
+							})
+							res(arr);	
+						}
+						
+					}
+				})
+			},
+			select: function(event,obj){
+				$.ajax({
+					url: `http://www.omdbapi.com/?apikey=3fd68d19&i=${obj.item.imdbID}`,
+					success: function(data){
+						$('#movieImg').attr('src',data.Poster);
+						console.log(data);
+						$('#genres').html(data.Genre.split(', ').map(function(obj,i){ return `<div class="chip">${obj}</div>`; }));
+						$('#cast').html(data.Actors.split(', ').map(function(obj,i){ return `<div class="chip">${obj}</div>`; }));
+						$('#imdbRating').html(`<a href="https://www.imdb.com/title/${data.imdbID}" target="blank">${data.imdbRating}/10</a>`);
+						$('#imdbVotes').text(data.imdbVotes);
+						$('#plot').text(data.Plot);
+						$('#movieTitle').text(`${data.Title} (${data.Year})`);
+						$('#movie').show();
+					}
+				})
+			}
+		});
+	</script>
+</html>

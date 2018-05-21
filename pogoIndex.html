@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Title of the document</title>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	</head>
+
+	<body>
+	<p><strong>Last Update time: </strong><span id="lastUpdate"></span></p>
+	<p><strong>Latest Version: </strong><span id="latestVer"></span></p>
+	<p><strong id="updateInfo"></strong></p>
+	
+	</body>
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script>
+		var gm;
+
+		$.ajax({
+			url: `https://raw.githubusercontent.com/pokemongo-dev-contrib/pokemongo-game-master/master/versions/latest/GAME_MASTER.json`,
+			success: function(data){
+				gm = JSON.parse(data);
+				$('#lastUpdate').text(new Date(Number.parseInt(gm.timestampMs)));
+				console.log(gm);
+			}
+		})
+
+		function checkForNewVersion(){
+			$.ajax({
+				url: `https://raw.githubusercontent.com/pokemongo-dev-contrib/pokemongo-game-master/master/versions/latest-version.txt`,
+				success: function(data){
+
+					$('#latestVer').text(data);
+
+					if(localStorage['prevVer'].trim() == data.trim()){
+						$('#updateInfo').html($('<span>').text('No Update'));
+					}
+					else
+					{
+						$('#updateInfo').html($('<span style="color:green;">').text('New Update'));
+						alert('New Version');
+						localStorage['prevVer'] = data.trim();
+					}
+				}
+				
+			})	
+		}
+		checkForNewVersion();
+
+
+		timer = setInterval(checkForNewVersion,1000*60*60);
+	</script>
+</html>
